@@ -29,3 +29,10 @@ To get started with this project, follow these steps:
 ```bash
 git clone https://github.com/Sanjaya-Samudra/JavaFX-Maven-Practice-Project-2.git
 
+*Once you clone*
+
+1. Go to **DBConnection** class and set up your own MySQL **username**, **password** and **port**.
+
+2. Create a Database as given in the repository. 
+
+
