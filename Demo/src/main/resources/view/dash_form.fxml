@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashFormController">
+    <children>
+        <JFXButton layoutX="79.0" layoutY="184.0" onAction="#btnAddCustomerFormOnAction" prefHeight="32.0" prefWidth="164.0" style="-fx-background-color: blue;" text="Add Customer" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </JFXButton>
+        <JFXButton layoutX="79.0" layoutY="235.0" onAction="#btnViewCustomerFormOnAction" prefHeight="32.0" prefWidth="164.0" style="-fx-background-color: blue;" text="View Customer" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </JFXButton>
+    </children>
+</AnchorPane>
