@@ -158,12 +158,19 @@ public class AddCustomerFormController implements Initializable {
 
 
             while (resultSet.next()){
+
+                LocalDate dob = null;
+                Date dobSqlDate = resultSet.getDate("DOB");
+                if (dobSqlDate != null) {
+                    dob = dobSqlDate.toLocalDate();
+                }
+
                 Customer customer = new Customer(
                         resultSet.getString("CustId"),
                         resultSet.getString("CustName"),
                         resultSet.getString("CustTitle"),
                         resultSet.getString("CustAddress"),
-                        resultSet.getDate("DOB").toLocalDate(),
+                        dob,
                         resultSet.getDouble("salary"),
                         resultSet.getString("City"),
                         resultSet.getString("Province"),
