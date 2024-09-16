@@ -24,7 +24,7 @@ public class DashFormController {
     void btnViewCustomerFormOnAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/view_customer_form.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/view_customer_from.fxml"))));
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);

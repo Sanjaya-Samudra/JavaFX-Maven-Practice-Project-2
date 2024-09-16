@@ -20,6 +20,6 @@ public class Customer {
     private LocalDate dob;
     private Double salary;
     private String city;
-    private String province;
     private String postalCode;
+    private String province;
 }

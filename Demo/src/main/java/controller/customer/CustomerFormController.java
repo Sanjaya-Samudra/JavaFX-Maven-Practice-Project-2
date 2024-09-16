@@ -1,4 +1,4 @@
-package controller;
+package controller.customer;
 
 import com.jfoenix.controls.JFXTextField;
 import db.DBConnection;
@@ -7,24 +7,25 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Customer;
 
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AddCustomerFormController implements Initializable {
+public class CustomerFormController implements Initializable {
 
+    public TableColumn colCity;
+    public TableColumn colProvince;
+    public TableColumn colPostalCode;
+    public JFXTextField txtCity;
+    public JFXTextField txtProvince;
+    public JFXTextField txtPostalCode;
     @FXML
     private ComboBox<String> cmbTitle;
 
@@ -44,15 +45,6 @@ public class AddCustomerFormController implements Initializable {
     private TableColumn colSalary;
 
     @FXML
-    private TableColumn<?, ?> colPostalCode;
-
-    @FXML
-    private TableColumn<?, ?> colProvince;
-
-    @FXML
-    private TableColumn<?, ?> colCity;
-
-    @FXML
     private DatePicker  dateDob;
 
     @FXML
@@ -70,16 +62,9 @@ public class AddCustomerFormController implements Initializable {
     @FXML
     private JFXTextField txtSalary;
 
-    @FXML
-    private JFXTextField txtPostalCode;
-
-    @FXML
-    private JFXTextField txtProvince;
-
-    @FXML
-    private JFXTextField txtCity;
-
     List<Customer> customerList = new ArrayList<>();
+
+    CustomerService service = new CustomerController();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -89,8 +74,8 @@ public class AddCustomerFormController implements Initializable {
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         colDob.setCellValueFactory(new PropertyValueFactory<>("dob"));
-        colCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         colProvince.setCellValueFactory(new PropertyValueFactory<>("province"));
+        colCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         colPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
 
         loadTable();
@@ -101,13 +86,14 @@ public class AddCustomerFormController implements Initializable {
         titleList.add("Ms.");
         cmbTitle.setItems(titleList);
 
-//        ----------------------------------------------------------------
-
         tblCustomers.getSelectionModel().selectedItemProperty().addListener((observableValue, oldVal, newVal) -> {
             System.out.println("1 : "+observableValue);
             System.out.println("OLD VAL : "+oldVal);
             System.out.println("NEW VAL : "+newVal);
-            addValueToText(newVal);
+            System.out.println("TEST 02");
+            if (newVal!=null){
+                addValueToText(newVal);
+            }
         });
     }
 
@@ -119,32 +105,29 @@ public class AddCustomerFormController implements Initializable {
         dateDob.setValue(newVal.getDob());
         cmbTitle.setValue(newVal.getTitle());
         txtCity.setText(newVal.getCity());
+        txtProvince.setText(newVal.getCity());
         txtPostalCode.setText(newVal.getPostalCode());
-        txtProvince.setText(newVal.getProvince());
     }
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
-        customerList.add(
-                new Customer(
-                        txtId.getText(),
-                        txtName.getText(),
-                        cmbTitle.getValue(),
-                        txtAddress.getText(),
-                        dateDob.getValue(),
-                        Double.parseDouble(txtSalary.getText()),
-                        txtCity.getText(),
-                        txtProvince.getText(),
-                        txtPostalCode.getText()
-                ));
+        Customer customer = new Customer(
+                txtId.getText(),
+                txtName.getText(),
+                cmbTitle.getValue(),
+                txtAddress.getText(),
+                dateDob.getValue(),
+                Double.parseDouble(txtSalary.getText()),
+                txtCity.getText(),
+                txtPostalCode.getText(),
+                txtProvince.getText()
+        );
+        if (service.addCustomer(customer)){
+            new Alert(Alert.AlertType.INFORMATION).show();
+        }else {
+            new Alert(Alert.AlertType.ERROR).show();
+        }
 
-
-
-    }
-
-    @FXML
-    void btnReloadOnAction(ActionEvent event) {
-        loadTable();
     }
 
     private void loadTable(){
@@ -155,7 +138,6 @@ public class AddCustomerFormController implements Initializable {
 
             PreparedStatement psTm = connection.prepareStatement("SELECT * FROM customer");
             ResultSet resultSet = psTm.executeQuery();
-
 
             while (resultSet.next()){
 
@@ -172,9 +154,9 @@ public class AddCustomerFormController implements Initializable {
                         resultSet.getString("CustAddress"),
                         dob,
                         resultSet.getDouble("salary"),
-                        resultSet.getString("City"),
-                        resultSet.getString("Province"),
-                        resultSet.getString("PostalCode")
+                        resultSet.getString("city"),
+                        resultSet.getString("postalCode"),
+                        resultSet.getString("province")
                 );
                 customerObservableList.add(customer);
             }
@@ -182,10 +164,6 @@ public class AddCustomerFormController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
-//        -------------------------------------------------------
-
 
         customerList.forEach(customer -> {
             customerObservableList.add(customer);
@@ -195,5 +173,24 @@ public class AddCustomerFormController implements Initializable {
 
     }
 
+    public void btnDeleteOnAction(ActionEvent actionEvent) {
 
+    }
+
+    public void btnUpdateOnAction(ActionEvent actionEvent) {
+
+        Customer customer = new Customer(
+                txtId.getText(),
+                txtName.getText(),
+                cmbTitle.getValue(),
+                txtAddress.getText(),
+                dateDob.getValue(),
+                Double.parseDouble(txtSalary.getText()),
+                txtCity.getText(),
+                txtPostalCode.getText(),
+                txtProvince.getText()
+        );
+
+
+    }
 }
