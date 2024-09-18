@@ -43,7 +43,7 @@ public class CustomerController implements CustomerService{
     @Override
     public boolean updateCustomer(Customer customer) {
 
-        String SQL = "UPDATE Customer SET CustTitle=?, CustName=?, DOB=?, salary=?, CustAddress=?, City=?, Province=?, PostalCode=? WHERE CustID=?";
+        String SQL = "UPDATE customer SET CustTitle=?, CustName=?, DOB=?, salary=?, CustAddress=?, City=?, Province=?, PostalCode=? WHERE CustID=?";
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             PreparedStatement psTm = connection.prepareStatement(SQL);
@@ -56,6 +56,7 @@ public class CustomerController implements CustomerService{
             psTm.setObject(7,customer.getProvince());
             psTm.setObject(8,customer.getPostalCode());
             psTm.setObject(9,customer.getId());
+
             return psTm.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -65,7 +66,7 @@ public class CustomerController implements CustomerService{
     @Override
     public boolean deleteCustomer(String id) {
         try {
-            return DBConnection.getInstance().getConnection().createStatement().executeUpdate("DELETE FROM Customer WHERE CustID='" + id + "'") > 0;
+            return DBConnection.getInstance().getConnection().createStatement().executeUpdate("DELETE FROM customer WHERE CustID='" + id + "'") > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

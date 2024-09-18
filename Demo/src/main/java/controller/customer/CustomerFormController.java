@@ -86,6 +86,7 @@ public class CustomerFormController implements Initializable {
         titleList.add("Ms.");
         cmbTitle.setItems(titleList);
 
+//        ----------------------------------------------------------------
         tblCustomers.getSelectionModel().selectedItemProperty().addListener((observableValue, oldVal, newVal) -> {
             System.out.println("1 : "+observableValue);
             System.out.println("OLD VAL : "+oldVal);
@@ -139,6 +140,7 @@ public class CustomerFormController implements Initializable {
             PreparedStatement psTm = connection.prepareStatement("SELECT * FROM customer");
             ResultSet resultSet = psTm.executeQuery();
 
+
             while (resultSet.next()){
 
                 LocalDate dob = null;
@@ -158,12 +160,16 @@ public class CustomerFormController implements Initializable {
                         resultSet.getString("postalCode"),
                         resultSet.getString("province")
                 );
+
                 customerObservableList.add(customer);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+//        -------------------------------------------------------
+
 
         customerList.forEach(customer -> {
             customerObservableList.add(customer);
