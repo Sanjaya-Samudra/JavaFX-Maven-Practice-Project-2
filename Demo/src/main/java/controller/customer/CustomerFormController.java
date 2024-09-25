@@ -13,7 +13,6 @@ import model.Customer;
 
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -45,7 +44,7 @@ public class CustomerFormController implements Initializable {
     private TableColumn colSalary;
 
     @FXML
-    private DatePicker  dateDob;
+    private DatePicker dateDob;
 
     @FXML
     private TableView<Customer> tblCustomers;
@@ -62,9 +61,7 @@ public class CustomerFormController implements Initializable {
     @FXML
     private JFXTextField txtSalary;
 
-    List<Customer> customerList = new ArrayList<>();
-
-    CustomerService service = new CustomerController();
+    CustomerService service = CustomerController.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -87,12 +84,9 @@ public class CustomerFormController implements Initializable {
         cmbTitle.setItems(titleList);
 
 //        ----------------------------------------------------------------
+        System.out.println("TEST 01");
         tblCustomers.getSelectionModel().selectedItemProperty().addListener((observableValue, oldVal, newVal) -> {
-            System.out.println("1 : "+observableValue);
-            System.out.println("OLD VAL : "+oldVal);
-            System.out.println("NEW VAL : "+newVal);
-            System.out.println("TEST 02");
-            if (newVal!=null){
+            if (newVal != null) {
                 addValueToText(newVal);
             }
         });
@@ -101,7 +95,7 @@ public class CustomerFormController implements Initializable {
     private void addValueToText(Customer newVal) {
         txtId.setText(newVal.getId());
         txtName.setText(newVal.getName());
-        txtSalary.setText(""+newVal.getSalary());
+        txtSalary.setText("" + newVal.getSalary());
         txtAddress.setText(newVal.getAddress());
         dateDob.setValue(newVal.getDob());
         cmbTitle.setValue(newVal.getTitle());
@@ -116,67 +110,23 @@ public class CustomerFormController implements Initializable {
                 txtId.getText(),
                 txtName.getText(),
                 cmbTitle.getValue(),
-                txtAddress.getText(),
                 dateDob.getValue(),
                 Double.parseDouble(txtSalary.getText()),
+                txtAddress.getText(),
                 txtCity.getText(),
                 txtPostalCode.getText(),
                 txtProvince.getText()
         );
-        if (service.addCustomer(customer)){
+        if (service.addCustomer(customer)) {
             new Alert(Alert.AlertType.INFORMATION).show();
-        }else {
+        } else {
             new Alert(Alert.AlertType.ERROR).show();
         }
 
     }
 
-    private void loadTable(){
-        ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
-
-        try {
-            Connection connection = DBConnection.getInstance().getConnection();
-
-            PreparedStatement psTm = connection.prepareStatement("SELECT * FROM customer");
-            ResultSet resultSet = psTm.executeQuery();
-
-
-            while (resultSet.next()){
-
-                LocalDate dob = null;
-                Date dobSqlDate = resultSet.getDate("DOB");
-                if (dobSqlDate != null) {
-                    dob = dobSqlDate.toLocalDate();
-                }
-
-                Customer customer = new Customer(
-                        resultSet.getString("CustId"),
-                        resultSet.getString("CustName"),
-                        resultSet.getString("CustTitle"),
-                        resultSet.getString("CustAddress"),
-                        dob,
-                        resultSet.getDouble("salary"),
-                        resultSet.getString("city"),
-                        resultSet.getString("postalCode"),
-                        resultSet.getString("province")
-                );
-
-                customerObservableList.add(customer);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-//        -------------------------------------------------------
-
-
-        customerList.forEach(customer -> {
-            customerObservableList.add(customer);
-        });
-
-        tblCustomers.setItems(customerObservableList);
-
+    private void loadTable() {
+        tblCustomers.setItems(service.getAllCustomers());
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
@@ -189,9 +139,9 @@ public class CustomerFormController implements Initializable {
                 txtId.getText(),
                 txtName.getText(),
                 cmbTitle.getValue(),
-                txtAddress.getText(),
                 dateDob.getValue(),
                 Double.parseDouble(txtSalary.getText()),
+                txtAddress.getText(),
                 txtCity.getText(),
                 txtPostalCode.getText(),
                 txtProvince.getText()

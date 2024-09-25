@@ -1,33 +1,37 @@
 package controller.item;
 
-import controller.item.ItemService;
 import db.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Customer;
 import model.Item;
+import util.CrudUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ItemController implements ItemService{
+public class ItemController implements ItemService {
+    private static ItemController instance;
+    private ItemController(){}
 
-
+    public static ItemController getInstance(){
+        return instance==null?instance=new ItemController():instance;
+    }
     @Override
     public boolean addItem(Item item) {
-        String SQL = "INSERT INTO Item values(?,?,?,?,?)";
+        String SQl = "INSERT INTO Item values(?,?,?,?,?)";
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
-            PreparedStatement psTm = connection.prepareStatement(SQL);
-            psTm.setObject(1, item.getItemCode());
-            psTm.setObject(2, item.getDescription());
-            psTm.setObject(3, item.getPackSize());
-            psTm.setObject(4, item.getUnitPrice());
-            psTm.setObject(5, item.getQtyOnHand());
+            Object execute = CrudUtil.execute(SQl,
+                    item.getItemCode(),
+                    item.getDescription(),
+                    item.getPackSize(),
+                    item.getUnitPrice(),
+                    item.getQty()
+            );
+            System.out.println(execute);
+            return true;
 
-            return psTm.executeUpdate()>0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -38,23 +42,18 @@ public class ItemController implements ItemService{
         ObservableList<Item> itemObservableList = FXCollections.observableArrayList();
         String SQL = "SELECT * FROM Item";
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
-            PreparedStatement psTm = connection.prepareStatement(SQL);
-            ResultSet resultSet = psTm.executeQuery();
+            ResultSet resultSet = CrudUtil.execute(SQL);
 
-            while (resultSet.next()){
-
-                itemObservableList.add(
-                        new Item(
-                                resultSet.getString(1),
-                                resultSet.getString(2),
-                                resultSet.getString(3),
-                                resultSet.getDouble(4),
-                                resultSet.getInt(5)
-                        )
-                );
+            while (resultSet.next()) {
+                itemObservableList.add(new Item(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getDouble(4),
+                        resultSet.getInt(5)
+                ));
             }
-            return  itemObservableList;
+            return itemObservableList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -62,20 +61,17 @@ public class ItemController implements ItemService{
 
     @Override
     public boolean updateItem(Item item) {
-        String SQL = "UPDATE Item SET Description=?, PackSize=?, UnitPrice=?, QtyOnHand=? WHERE ItemCode=?";
+        String SQL = "UPDATE Item SET Description=?, PackSize=?, UnitPrice=?, QtyOnHand=?  WHERE ItemCode=?";
 
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             PreparedStatement psTm = connection.prepareStatement(SQL);
-
             psTm.setObject(1, item.getDescription());
             psTm.setObject(2, item.getPackSize());
             psTm.setObject(3, item.getUnitPrice());
-            psTm.setObject(4, item.getQtyOnHand());
+            psTm.setObject(4, item.getQty());
             psTm.setObject(5, item.getItemCode());
-
             return psTm.executeUpdate() > 0;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -85,21 +81,22 @@ public class ItemController implements ItemService{
     public boolean deleteItem(String id) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            return connection.createStatement().executeUpdate("DELETE FROM Item WHERE ItemCode ='"+id+"'")>0;
+            return connection.createStatement().executeUpdate("DELETE FROM Item WHERE ItemCode ='" + id + "'") > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Customer searchItem(String id) {
-        String SQL = "SELECT * FROM Item WHERE ItemCode='"+id+"'";
+    public Item searchItem(String id) {
+
+        String SQL = "SELECT * FROM Item WHERE ItemCode='" + id + "'";
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             PreparedStatement psTm = connection.prepareStatement(SQL);
             ResultSet resultSet = psTm.executeQuery();
-            while(resultSet.next()){
-                new Item(
+            while (resultSet.next()) {
+                return new Item(
                         resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -110,6 +107,12 @@ public class ItemController implements ItemService{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return null;
+    }
+
+
+    private void sample(Object... args) {
+
     }
 }

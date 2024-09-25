@@ -31,7 +31,7 @@ public class DashFormController {
         }
     }
 
-    public void btnItemFormOnAction(ActionEvent actionEvent) {
+    public void btnItemFromOnAction(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
             stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/item_form.fxml"))));

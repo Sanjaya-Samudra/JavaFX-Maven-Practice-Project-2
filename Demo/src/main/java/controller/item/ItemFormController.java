@@ -1,6 +1,7 @@
 package controller.item;
 
 import com.jfoenix.controls.JFXTextField;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,10 +26,10 @@ public class ItemFormController implements Initializable {
     private TableColumn<?, ?> colPackSize;
 
     @FXML
-    private TableColumn<?, ?> colQtyOnHand;
+    private TableColumn<?, ?> colQty;
 
     @FXML
-    private TableColumn<?, ?> colUnitPrice;
+    private TableColumn<?, ?> colUnitPrize;
 
     @FXML
     private TableView<Item> tblItems;
@@ -43,101 +44,100 @@ public class ItemFormController implements Initializable {
     private JFXTextField txtPackSize;
 
     @FXML
-    private JFXTextField txtQtyOnHand;
+    private JFXTextField txtQty;
 
     @FXML
     private JFXTextField txtUnitPrice;
-
-    ItemService service = new ItemController();
-
+    ItemService service = ItemController.getInstance();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         colItemCode.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colPackSize.setCellValueFactory(new PropertyValueFactory<>("packSize"));
-        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        colQtyOnHand.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
+        colUnitPrize.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
 
         tblItems.getSelectionModel().selectedItemProperty().addListener((observableValue, oldVal, newVal) -> {
-            if (newVal!=null){
+            if (newVal != null) {
                 addValueToText(newVal);
             }
         });
 
         loadTable();
     }
-
     private void addValueToText(Item newVal) {
         txtItemCode.setText(newVal.getItemCode());
         txtDescription.setText(newVal.getDescription());
         txtPackSize.setText(newVal.getPackSize());
         txtUnitPrice.setText(newVal.getUnitPrice().toString());
-        txtQtyOnHand.setText(newVal.getQtyOnHand().toString());
+        txtQty.setText(newVal.getQty().toString());
     }
-
     @FXML
     void btnAddOnAction(ActionEvent event) {
-
-        if(
+        if (
                 service.addItem(
-                    new Item(
-                            txtItemCode.getText(),
-                            txtDescription.getText(),
-                            txtPackSize.getText(),
-                            Double.parseDouble(txtUnitPrice.getText()),
-                            Integer.parseInt(txtQtyOnHand.getText())
-                    )
+                        new Item(
+                                txtItemCode.getText(),
+                                txtDescription.getText(),
+                                txtPackSize.getText(),
+                                Double.parseDouble(txtUnitPrice.getText()),
+                                Integer.parseInt(txtQty.getText())
+                        )
                 )
-        ){
-            new Alert(Alert.AlertType.INFORMATION, "Item Added!").show();
+        ) {
+            new Alert(Alert.AlertType.INFORMATION, "Item Added!!").show();
             loadTable();
-        }else{
-            new Alert(Alert.AlertType.INFORMATION, "Item Not Added!").show();
+
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Item Not Added!!").show();
+
         }
     }
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        if(service.deleteItem(txtItemCode.getText())){
-            new Alert(Alert.AlertType.INFORMATION, "Item Deleted!").show();
+        if (service.deleteItem(txtItemCode.getText())) {
+            new Alert(Alert.AlertType.INFORMATION, "Item Deleted!!").show();
             loadTable();
-        }else{
-            new Alert(Alert.AlertType.INFORMATION, "Item Not Added!").show();
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "Item Not Deleted!!").show();
         }
     }
 
     @FXML
     void btnSearchOnAction(ActionEvent event) {
-//        Item item = service.searchItem(txtItemCode.getText());
-//        txtDescription.setText(item.getDescription());
-//        txtPackSize.setText(item.getPackSize());
-//        txtQtyOnHand.setText(item.getQtyOnHand().toString());
-//        txtUnitPrice.setText(item.getUnitPrice().toString());
+        Item item = service.searchItem(txtItemCode.getText());
+        txtDescription.setText(item.getDescription());
+        txtPackSize.setText(item.getPackSize());
+        txtQty.setText(item.getQty().toString());
+        txtUnitPrice.setText(item.getUnitPrice().toString());
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
 
-        if(
+        if (
                 service.updateItem(
-                    new Item(
-                            txtItemCode.getText(),
-                            txtDescription.getText(),
-                            txtPackSize.getText(),
-                            Double.parseDouble(txtUnitPrice.getText()),
-                            Integer.parseInt(txtQtyOnHand.getText())
-                    )
+                        new Item(
+                                txtItemCode.getText(),
+                                txtDescription.getText(),
+                                txtPackSize.getText(),
+                                Double.parseDouble(txtUnitPrice.getText()),
+                                Integer.parseInt(txtQty.getText())
+                        )
                 )
-        ){
-            new Alert(Alert.AlertType.INFORMATION,"Item Updated!").show();
+        ) {
+            new Alert(Alert.AlertType.INFORMATION, "Item Updated !!").show();
             loadTable();
-        }else{
-            new Alert(Alert.AlertType.INFORMATION,"Item Not Updated!").show();
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "Item Not Updated !!").show();
+
         }
     }
 
-    private void loadTable(){
+    private void loadTable() {
         tblItems.setItems(service.getAllItems());
     }
+
 
 }
