@@ -24,14 +24,14 @@ public class DashFormController {
     void btnViewCustomerFormOnAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/view_customer_from.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/view_customer_form.fxml"))));
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void btnItemFromOnAction(ActionEvent actionEvent) {
+    public void btnItemFormOnAction(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
             stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/item_form.fxml"))));
