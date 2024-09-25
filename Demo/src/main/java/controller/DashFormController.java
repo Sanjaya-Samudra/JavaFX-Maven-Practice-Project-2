@@ -40,4 +40,14 @@ public class DashFormController {
             throw new RuntimeException(e);
         }
     }
+
+    public void btnOrderFormOnAction(ActionEvent actionEvent) {
+        try {
+            Stage stage = new Stage();
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/place_order_form.fxml"))));
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

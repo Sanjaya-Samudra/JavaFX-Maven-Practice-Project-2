@@ -186,4 +186,7 @@ public class PlaceOrderFormController implements Initializable {
     }
 
 
+    public void btnPlaceOrderOnAction(ActionEvent actionEvent) {
+        new Alert(Alert.AlertType.INFORMATION, "Sorry! Button Not Set Yet").show();
+    }
 }

@@ -35,7 +35,7 @@
             <TableColumn fx:id="colTotal" prefWidth="99.0" text="Total" />
          </columns>
       </TableView>
-      <Button fx:id="btnPlaceOrderOnAction" layoutX="479.0" layoutY="409.0" mnemonicParsing="false" text="Place Order" />
+      <Button layoutX="479.0" layoutY="409.0" mnemonicParsing="false" onAction="#btnPlaceOrderOnAction" text="Place Order" />
       <Label layoutX="31.0" layoutY="413.0" text="NET Total :">
          <font>
             <Font name="System Bold Italic" size="15.0" />
