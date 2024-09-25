@@ -149,4 +149,20 @@ public class CustomerFormController implements Initializable {
 
 
     }
+
+    public void btnSearchOnAction(ActionEvent actionEvent) {
+        Customer customer = service.searchCustomer(txtId.getText());
+        if (customer==null){
+            new Alert(Alert.AlertType.ERROR,"No Customer Found").show();
+        }else {
+            txtAddress.setText(customer.getAddress());
+            txtCity.setText((customer.getCity()));
+            txtName.setText(customer.getName());
+            txtSalary.setText(Double.toString(customer.getSalary()));
+            txtProvince.setText(customer.getProvince());
+            txtPostalCode.setText(customer.getPostalCode());
+            cmbTitle.setValue(customer.getTitle());
+            dateDob.setValue(customer.getDob());
+        }
+    }
 }
