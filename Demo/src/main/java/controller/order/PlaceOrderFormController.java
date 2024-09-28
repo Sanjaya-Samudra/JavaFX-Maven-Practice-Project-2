@@ -139,6 +139,7 @@ public class PlaceOrderFormController implements Initializable {
             CartTm cartTm = new CartTm(itemCode, itemDesc, qty, unitPrice, total);
             cartTms.add(cartTm);
             tblCart.setItems(cartTms);
+            calNetTotal();
         }
 
     }
@@ -188,5 +189,17 @@ public class PlaceOrderFormController implements Initializable {
 
     public void btnPlaceOrderOnAction(ActionEvent actionEvent) {
         new Alert(Alert.AlertType.INFORMATION, "Sorry! Button Not Set Yet").show();
+    }
+
+    private void calNetTotal(){
+
+        Double netTotal = 0.0;
+
+        for(CartTm cartTm : cartTms){
+            netTotal += cartTm.getTotal();
+        }
+
+        lblNetTotal.setText(Double.toString(netTotal));
+
     }
 }
