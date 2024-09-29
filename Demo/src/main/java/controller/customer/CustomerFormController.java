@@ -100,27 +100,31 @@ public class CustomerFormController implements Initializable {
         dateDob.setValue(newVal.getDob());
         cmbTitle.setValue(newVal.getTitle());
         txtCity.setText(newVal.getCity());
-        txtProvince.setText(newVal.getCity());
+        txtProvince.setText(newVal.getProvince());
         txtPostalCode.setText(newVal.getPostalCode());
     }
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
-        Customer customer = new Customer(
-                txtId.getText(),
-                txtName.getText(),
-                cmbTitle.getValue(),
-                dateDob.getValue(),
-                Double.parseDouble(txtSalary.getText()),
-                txtAddress.getText(),
-                txtCity.getText(),
-                txtPostalCode.getText(),
-                txtProvince.getText()
-        );
-        if (service.addCustomer(customer)) {
-            new Alert(Alert.AlertType.INFORMATION).show();
+        if(
+                service.addCustomer(
+                        new Customer(
+                                txtId.getText(),
+                                txtName.getText(),
+                                cmbTitle.getValue(),
+                                dateDob.getValue(),
+                                Double.parseDouble(txtSalary.getText()),
+                                txtAddress.getText(),
+                                txtCity.getText(),
+                                txtPostalCode.getText(),
+                                txtProvince.getText()
+                        )
+                )
+        ){
+            new Alert(Alert.AlertType.INFORMATION, "Customer Added!").show();
+            loadTable();
         } else {
-            new Alert(Alert.AlertType.ERROR).show();
+            new Alert(Alert.AlertType.ERROR, "Customer Not Added!").show();
         }
 
     }
@@ -129,24 +133,39 @@ public class CustomerFormController implements Initializable {
         tblCustomers.setItems(service.getAllCustomers());
     }
 
+    @FXML
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-
+        if (service.deleteCustomer(txtId.getText())) {
+            new Alert(Alert.AlertType.INFORMATION, "Customer Deleted!!").show();
+            loadTable();
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "Customer Not Deleted!!").show();
+        }
     }
 
+    @FXML
     public void btnUpdateOnAction(ActionEvent actionEvent) {
 
-        Customer customer = new Customer(
-                txtId.getText(),
-                txtName.getText(),
-                cmbTitle.getValue(),
-                dateDob.getValue(),
-                Double.parseDouble(txtSalary.getText()),
-                txtAddress.getText(),
-                txtCity.getText(),
-                txtPostalCode.getText(),
-                txtProvince.getText()
-        );
-
+        if(
+                service.updateCustomer(
+                        new Customer(
+                                txtId.getText(),
+                                cmbTitle.getValue(),
+                                txtName.getText(),
+                                dateDob.getValue(),
+                                Double.parseDouble(txtSalary.getText()),
+                                txtAddress.getText(),
+                                txtCity.getText(),
+                                txtPostalCode.getText(),
+                                txtProvince.getText()
+                        )
+                )
+        ){
+            new Alert(Alert.AlertType.INFORMATION, "Customer Updated!").show();
+            loadTable();
+        }else {
+            new Alert(Alert.AlertType.INFORMATION, "Customer Not Updated!").show();
+        }
 
     }
 

@@ -89,7 +89,6 @@ public class ItemFormController implements Initializable {
         ) {
             new Alert(Alert.AlertType.INFORMATION, "Item Added!!").show();
             loadTable();
-
         } else {
             new Alert(Alert.AlertType.ERROR, "Item Not Added!!").show();
 
@@ -129,10 +128,10 @@ public class ItemFormController implements Initializable {
                         )
                 )
         ) {
-            new Alert(Alert.AlertType.INFORMATION, "Item Updated !!").show();
+            new Alert(Alert.AlertType.INFORMATION, "Item Updated!").show();
             loadTable();
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Item Not Updated !!").show();
+            new Alert(Alert.AlertType.INFORMATION, "Item Not Updated!").show();
 
         }
     }
