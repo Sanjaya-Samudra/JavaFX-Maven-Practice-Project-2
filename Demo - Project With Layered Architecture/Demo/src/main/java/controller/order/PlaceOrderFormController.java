@@ -225,18 +225,4 @@ public class PlaceOrderFormController implements Initializable {
         }
         System.out.println(order);
     }
-
-    public void btnCommitOnAction(ActionEvent actionEvent) throws SQLException {
-        DBConnection.getInstance().getConnection().commit();
-    }
-
-    public void btnCustomerFromOnAction(ActionEvent actionEvent) {
-        try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../../view/customer_form.fxml"))));
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
